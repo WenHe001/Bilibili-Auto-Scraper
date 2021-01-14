@@ -1,0 +1,478 @@
+name: Bilibili Scraper
+
+on: [push]
+
+jobs:
+  Rookie-Board:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install lxml
+        pip install requests
+        pip install pandas
+        pip install bs4
+    - name: Rookie Board
+      run: |
+        python rookie-scraper.py
+    - name: commit
+      run: |
+        git config --global user.email bot.jimmy@bot.com
+        git config --global user.name BotJimmy
+        git add -A
+        git commit -m "Update: `date '+%Y-%m-%d %H:%M:%S'`"
+      continue-on-error: true
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        force: true
+        branch: ${{ github.ref }}
+        
+  Cyberstar-Scrape-Chunk-1:
+    needs: [Rookie-Board]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install lxml
+        pip install requests
+        pip install pandas
+        pip install opencc
+        pip install numba
+        pip install bs4
+        pip install fake_headers
+    - name: Check update and scrape DM
+      run: |
+        python check_and_scrape.py cyberstar 1 
+    - uses: actions/upload-artifact@master
+      with:
+        name: cyberstar1
+        path: cyberstar1    
+    
+  Cyberstar-Scrape-Chunk-2:
+    needs: [Rookie-Board]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install lxml
+        pip install requests
+        pip install pandas
+        pip install opencc
+        pip install numba
+        pip install bs4
+        pip install fake_headers
+    - name: Check update and scrape DM
+      run: |
+        python check_and_scrape.py cyberstar 2 
+    - uses: actions/upload-artifact@master
+      with:
+        name: cyberstar2
+        path: cyberstar2    
+    
+  Cyberstar-Scrape-Chunk-3:
+    needs: [Rookie-Board]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install lxml
+        pip install requests
+        pip install pandas
+        pip install opencc
+        pip install numba
+        pip install bs4
+        pip install fake_headers
+    - name: Check update and scrape DM
+      run: |
+        python check_and_scrape.py cyberstar 3 
+    - uses: actions/upload-artifact@master
+      with:
+        name: cyberstar3
+        path: cyberstar3    
+    
+  Cyberstar-Scrape-Chunk-4:
+    needs: [Rookie-Board]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install lxml
+        pip install requests
+        pip install pandas
+        pip install opencc
+        pip install numba
+        pip install bs4
+        pip install fake_headers
+    - name: Check update and scrape DM
+      run: |
+        python check_and_scrape.py cyberstar 4 
+    - uses: actions/upload-artifact@master
+      with:
+        name: cyberstar4
+        path: cyberstar4    
+    
+  Cyberstar-Scrape-Chunk-5:
+    needs: [Rookie-Board]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install lxml
+        pip install requests
+        pip install pandas
+        pip install opencc
+        pip install numba
+        pip install bs4
+        pip install fake_headers
+    - name: Check update and scrape DM
+      run: |
+        python check_and_scrape.py cyberstar 5 
+    - uses: actions/upload-artifact@master
+      with:
+        name: cyberstar5
+        path: cyberstar5    
+    
+  Cyberstar-Scrape-Chunk-6:
+    needs: [Rookie-Board]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install lxml
+        pip install requests
+        pip install pandas
+        pip install opencc
+        pip install numba
+        pip install bs4
+        pip install fake_headers
+    - name: Check update and scrape DM
+      run: |
+        python check_and_scrape.py cyberstar 6 
+    - uses: actions/upload-artifact@master
+      with:
+        name: cyberstar6
+        path: cyberstar6    
+    
+  Rookie-Scrape-Chunk-1:
+    needs: [Rookie-Board]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install lxml
+        pip install requests
+        pip install pandas
+        pip install opencc
+        pip install numba
+        pip install bs4
+        pip install fake_headers
+    - name: Check update and scrape DM
+      run: |
+        python check_and_scrape.py rookie 1 
+    - uses: actions/upload-artifact@master
+      with:
+        name: rookie1
+        path: rookie1    
+    
+  Rookie-Scrape-Chunk-2:
+    needs: [Rookie-Board]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install lxml
+        pip install requests
+        pip install pandas
+        pip install opencc
+        pip install numba
+        pip install bs4
+        pip install fake_headers
+    - name: Check update and scrape DM
+      run: |
+        python check_and_scrape.py rookie 2 
+    - uses: actions/upload-artifact@master
+      with:
+        name: rookie2
+        path: rookie2    
+    
+  Rookie-Scrape-Chunk-3:
+    needs: [Rookie-Board]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install lxml
+        pip install requests
+        pip install pandas
+        pip install opencc
+        pip install numba
+        pip install bs4
+        pip install fake_headers
+    - name: Check update and scrape DM
+      run: |
+        python check_and_scrape.py rookie 3 
+    - uses: actions/upload-artifact@master
+      with:
+        name: rookie3
+        path: rookie3    
+    
+  Rookie-Scrape-Chunk-4:
+    needs: [Rookie-Board]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install lxml
+        pip install requests
+        pip install pandas
+        pip install opencc
+        pip install numba
+        pip install bs4
+        pip install fake_headers
+    - name: Check update and scrape DM
+      run: |
+        python check_and_scrape.py rookie 4 
+    - uses: actions/upload-artifact@master
+      with:
+        name: rookie4
+        path: rookie4    
+    
+  Rookie-Scrape-Chunk-5:
+    needs: [Rookie-Board]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install lxml
+        pip install requests
+        pip install pandas
+        pip install opencc
+        pip install numba
+        pip install bs4
+        pip install fake_headers
+    - name: Check update and scrape DM
+      run: |
+        python check_and_scrape.py rookie 5 
+    - uses: actions/upload-artifact@master
+      with:
+        name: rookie5
+        path: rookie5    
+    
+  Rookie-Scrape-Chunk-6:
+    needs: [Rookie-Board]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install lxml
+        pip install requests
+        pip install pandas
+        pip install opencc
+        pip install numba
+        pip install bs4
+        pip install fake_headers
+    - name: Check update and scrape DM
+      run: |
+        python check_and_scrape.py rookie 6 
+    - uses: actions/upload-artifact@master
+      with:
+        name: rookie6
+        path: rookie6
+
+  Merge:
+    needs: [Cyberstar-Scrape-Chunk-1, Cyberstar-Scrape-Chunk-2, Cyberstar-Scrape-Chunk-3, Cyberstar-Scrape-Chunk-4, Cyberstar-Scrape-Chunk-5, Cyberstar-Scrape-Chunk-6, Rookie-Scrape-Chunk-1, Rookie-Scrape-Chunk-2, Rookie-Scrape-Chunk-3, Rookie-Scrape-Chunk-4, Rookie-Scrape-Chunk-5, Rookie-Scrape-Chunk-6]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - uses: actions/download-artifact@master
+      with:
+        name: rookie1
+        path: rookie1
+    - uses: actions/download-artifact@master
+      with:
+        name: rookie2
+        path: rookie2
+    - uses: actions/download-artifact@master
+      with:
+        name: rookie3
+        path: rookie3
+    - uses: actions/download-artifact@master
+      with:
+        name: rookie4
+        path: rookie4
+    - uses: actions/download-artifact@master
+      with:
+        name: rookie5
+        path: rookie5
+    - uses: actions/download-artifact@master
+      with:
+        name: rookie6
+        path: rookie6
+    - uses: actions/download-artifact@master
+      with:
+        name: cyberstar1
+        path: cyberstar1
+    - uses: actions/download-artifact@master
+      with:
+        name: cyberstar2
+        path: cyberstar2
+    - uses: actions/download-artifact@master
+      with:
+        name: cyberstar3
+        path: cyberstar3
+    - uses: actions/download-artifact@master
+      with:
+        name: cyberstar4
+        path: cyberstar4
+    - uses: actions/download-artifact@master
+      with:
+        name: cyberstar5
+        path: cyberstar5
+    - uses: actions/download-artifact@master
+      with:
+        name: cyberstar6
+        path: cyberstar6
+    - name: Merge
+      run: |
+        cp -n cyberstar[0-9]/dm/* cyberstar_dm
+        cp -n rookie[0-9]/dm/* rookie_dm
+        cp -n cyberstar[0-9]/update/* cyberstar_list
+        cp -n rookie[0-9]/update/* rookie_list
+    - name: commit
+      run: |
+        git config --global user.email bot.jimmy@bot.com
+        git config --global user.name BotJimmy
+        git add -A
+        git commit -m "Update: `date '+%Y-%m-%d %H:%M:%S'`"
+      continue-on-error: true
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        force: true
+        branch: ${{ github.ref }}
+
+  Looping:
+    needs: [Merge]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Commit
+      env:
+        MY_TOKEN: ${{ secrets.MY_TOKEN }}
+      run: |
+        git config --local user.email "loop@loop.com"
+        git config --local user.name "Loop"
+        git pull https://${MY_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+        echo $(date +%s) > date
+        git add -A
+        git commit -m "Scrapers Start: `date '+%Y-%m-%d %H:%M:%S'`" -a
+        git push https://${MY_TOKEN}@github.com/${GITHUB_REPOSITORY}.git HEAD:master --follow-tags
