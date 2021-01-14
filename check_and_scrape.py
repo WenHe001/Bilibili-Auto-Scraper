@@ -25,16 +25,16 @@ punc =  "[.!//_,$&%^*()<>+\"'?@#-:~{}]+[——\\\\=、：“”‘’《》【�
 char = "[^\u4e00-\u9fa5^a-z^A-Z^0-9^，^。^！^？]"
 
 
-def check_update(t_flag):
+def check_update(t_flag, up_list):
     '''
     intro: check if video producers upload new video after t_flag (timestamp)
     input:
         - t_flag (int/float)
+        - up_list (list) contains id of interested video producers
     output:
         - pd.DataFrame (uid,bvid,cdate)
     '''
     update_list = []
-    # up_list is a global var, which contains id of interested video producers
     for i in up_list:
         # API of video publish list (mid = user id)
         url = f'https://api.bilibili.com/x/space/arc/search?mid={i}&ps=5&order=pubdate'
@@ -44,12 +44,15 @@ def check_update(t_flag):
             # if there's no new video, this list would not have the key "vlist"
             bvid_list = [[i, v['bvid'], v['created']] 
                          for v in json['data']['list']['vlist'] if v['created'] > t_flag]
+            for j in bvid_list:
+                print(f'Update: {i}-{j[1]}')
         except:
             bvid_list = []
-            print(f'check faild: {i}')
+            print(f'Check Faild: {i}')
         update_list += bvid_list
         time.sleep(0.3)
-    return pd.DataFrame(update_list, columns=['uid', 'bvid', 'cdate'])
+    df_update = pd.DataFrame(update_list, columns=['uid', 'bvid', 'cdate'])
+    return df_update
 
 
 def get(url):
@@ -123,6 +126,7 @@ def get_danmaku(bvid):
     cid = get_cid_via_bvid(bvid)
     page = get_danmaku_page(cid)
     danmaku = parse_danmaku_page(page)
+    print(f'Scrape DM: {bvid}')
     return danmaku
 
 
@@ -228,7 +232,6 @@ def check_and_scrape_dm(target_user, chunk):
     two_weeks_ago = int(datetime.now().timestamp()-14*24*60*60)
 
     # up_list will also be used in func "check_update"
-    global up_list
     with open(f'./{target_user}_list/{target_user}{chunk}.txt', 'r') as f:
         up_list = f.read().split('\n')
     
@@ -243,7 +246,7 @@ def check_and_scrape_dm(target_user, chunk):
         t_flag = int(f.read().strip())
         
     # check update
-    df_update = check_update(t_flag)
+    df_update = check_update(t_flag, up_list)
     df = pd.concat([df, df_update])
     df.to_csv(f'./{target_user}{chunk}/update/{file_name}', index=0)
     
@@ -265,6 +268,7 @@ def check_and_scrape_dm(target_user, chunk):
         else:
             t_flag = int(df_old[df_old['bvid']==bvid]['SendTime'].max())
         pd.concat([df_new[df_new['SendTime']>t_flag], df_old])\
+          .drop_duplicates()\
           .to_csv(df_new_path, index=0)
 
 
