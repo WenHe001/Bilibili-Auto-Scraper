@@ -266,7 +266,7 @@ def check_and_scrape_dm(target_user, chunk):
         if df_old['SendTime'].max() is np.nan:
             t_flag = 0
         else:
-            t_flag = int(df_old[df_old['bvid']==bvid]['SendTime'].max())
+            t_flag = int(df_old['SendTime'].max())
         pd.concat([df_new[df_new['SendTime']>t_flag], df_old])\
           .drop_duplicates()\
           .to_csv(df_new_path, index=0)

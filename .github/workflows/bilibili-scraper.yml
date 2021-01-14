@@ -443,9 +443,13 @@ jobs:
     - name: Merge
       run: |
         echo $(date '+%Y-%m-%d %H:%M:%S') > error_log
+        ls cyberstar[0-9]/dm/* >> error_log
         cp -n cyberstar[0-9]/dm/* cyberstar_dm 2>> error_log
+        ls rookie[0-9]/dm/* >> error_log
         cp -n rookie[0-9]/dm/* rookie_dm 2>> error_log
+        ls cyberstar[0-9]/update/* >> error_log
         cp -n cyberstar[0-9]/update/* cyberstar_list 2>> error_log
+        ls rookie[0-9]/update/* >> error_log
         cp -n rookie[0-9]/update/* rookie_list 2>> error_log
     - name: commit
       run: |
@@ -477,3 +481,4 @@ jobs:
         git add -A
         git commit -m "Scrapers Start: `date '+%Y-%m-%d %H:%M:%S'`" -a
         git push https://${MY_TOKEN}@github.com/${GITHUB_REPOSITORY}.git HEAD:master --follow-tags
+        sleep 10m
