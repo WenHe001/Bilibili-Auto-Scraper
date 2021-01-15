@@ -126,7 +126,6 @@ def get_danmaku(bvid):
     cid = get_cid_via_bvid(bvid)
     page = get_danmaku_page(cid)
     danmaku = parse_danmaku_page(page)
-    print(f'Scrape DM: {bvid}')
     return danmaku
 
 
@@ -254,6 +253,11 @@ def check_and_scrape_dm(target_user, chunk):
     for bvid in df['bvid'][df['cdate']>two_weeks_ago]:
         try:
             df_new = clean_danmaku(get_danmaku(bvid))
+            df_new = df_new[df_new['SendTime']>t_flag]
+            if len(df_new) > 0:
+                print(f'Scrape DM: {bvid}')
+            else:
+                print(f'No updated DM: {bvid}')
         except KeyError:
             print(f'dm failed: {bvid}')
             continue
@@ -267,7 +271,7 @@ def check_and_scrape_dm(target_user, chunk):
             t_flag = 0
         else:
             t_flag = int(df_old['SendTime'].max())
-        pd.concat([df_new[df_new['SendTime']>t_flag], df_old])\
+        pd.concat([df_new, df_old])\
           .drop_duplicates()\
           .to_csv(df_new_path, index=0)
 
