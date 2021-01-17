@@ -197,9 +197,9 @@ def clean_danmaku(df):
     output:
         - cleaned df (pd.DataFrame)
     '''
-    df['AppearTime'] = df['AppearTime'].astype(float)
-    df['SendTime'] = df['SendTime'].astype(int)
-    df['DmContent'] = df['DmContent'].astype('str')
+    df.loc[:,'AppearTime'] = df['AppearTime'].astype(float)
+    df.loc[:,'SendTime'] = df['SendTime'].astype(int)
+    df.loc[:,'DmContent'] = df['DmContent'].astype('str')
     df = df[df['DmContent'].apply(len)>1]
     df.loc[:,'DmContent'] = df['DmContent']\
                               .apply(clean_text)\
