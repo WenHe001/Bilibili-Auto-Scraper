@@ -392,6 +392,8 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
+    - name: Time Flag
+      run: echo $(date +%s) > date
     - uses: actions/download-artifact@master
       with:
         name: rookie1
@@ -471,11 +473,10 @@ jobs:
       env:
         MY_TOKEN: ${{ secrets.MY_TOKEN }}
       run: |
+        sleep 10m
         git config --local user.email "loop@loop.com"
         git config --local user.name "Loop"
         git pull https://${MY_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-        echo $(date +%s) > date
         git add -A
         git commit -m "Scrapers Start: `date '+%Y-%m-%d %H:%M:%S'`" -a
         git push https://${MY_TOKEN}@github.com/${GITHUB_REPOSITORY}.git HEAD:master --follow-tags
-        sleep 10m
