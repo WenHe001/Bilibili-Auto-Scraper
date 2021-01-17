@@ -39,6 +39,8 @@ def check_update(t_flag, up_list):
     '''
     update_list = []
     for i in up_list:
+        if i == '':
+            continue
         # API of video publish list (mid = user id)
         url = f'https://api.bilibili.com/x/space/arc/search?mid={i}&ps=5&order=pubdate'
         # convert json string to python dict
@@ -56,7 +58,7 @@ def check_update(t_flag, up_list):
                 print(f'Update: {i}-{j[1]}')
         except:
             bvid_list = []
-            print(f'Check Faild: {i}')
+            print(f'Check Failed: {i}')
         update_list += bvid_list
         time.sleep(0.3)
     df_update = pd.DataFrame(update_list, columns=['uid', 'bvid', 'cdate'])
@@ -74,18 +76,26 @@ def get(url):
     return requests.get(url, headers={'user-agent': Headers().generate()['User-Agent']})
 
 
-def get_cid_via_bvid(bvid):
+def get_video_stat(bvid):
     '''
-    intro: cid is required when scrapping danmaku
-           every video has an unique bv id and an unique cid
+    intro: get video info
     input: 
         - bvid (string)
     output:
-        - cid (string)
+        - cid, view, favorite, coin, share, like
     '''
-    url = f'https://api.bilibili.com/x/player/pagelist?bvid={bvid}'
+    url = f'http://api.bilibili.com/x/web-interface/view?bvid={bvid}'
     resp = eval(requests.get(url).content.decode('utf-8'))
-    return resp['data'][0]['cid']
+    stat_list = [
+        str(resp['data']['cid']),
+        str(resp['data']['stat']['view']),
+        str(resp['data']['stat']['favorite']),
+        str(resp['data']['stat']['coin']),
+        str(resp['data']['stat']['share']),
+        str(resp['data']['stat']['like']),
+        str(int(datetime.now().timestamp()))
+    ]
+    return stat_list
 
 
 def get_danmaku_page(cid):
@@ -122,16 +132,15 @@ def parse_danmaku_page(page):
                 'SendTime', 'FontColor', 'DmType']]
 
 
-def get_danmaku(bvid):
+def get_danmaku(cid):
     '''
-    intro: get danmaku using bvid
+    intro: get danmaku using cid
     input:
-        - bvid (string)
+        - cid (string)
     output:
         - pd.DataFrame
         [Sender,DmContent,AppearTime,SendTime,FontColor,DmType]
     '''
-    cid = get_cid_via_bvid(bvid)
     page = get_danmaku_page(cid)
     danmaku = parse_danmaku_page(page)
     return danmaku
@@ -260,18 +269,15 @@ def check_and_scrape_dm(target_user, chunk):
     
     # scrape danmaku
     for bvid in df['bvid'][df['cdate']>two_weeks_ago]:
-        try:
-            df_new = clean_danmaku(get_danmaku(bvid))
-            df_new = df_new[df_new['SendTime']>t_flag]
-            if len(df_new) > 0:
-                print(f'Scrape DM: {bvid}')
-            else:
-                print(f'No updated DM: {bvid}')
-        except KeyError:
-            print(f'dm failed: {bvid}')
-            continue
+        cid, *stat_list = get_video_stat(bvid)
+        if os.path.exists(f'{bvid}_history.csv'):
+            with open(f'{bvid}_history.csv', 'r') as f:
+                scrape_history = f.read().strip()
+        else:
+            scrape_history = ''
+        with open(f'./{target_user}{chunk}/dm/{bvid}_history.csv', 'w') as f:
+            f.write(','.join(stat_list)+'\n'+scrape_history)
         df_old_path = f'./{target_user}_dm/{bvid}.csv'
-        df_new_path = f'./{target_user}{chunk}/dm/{bvid}.csv'
         if os.path.exists(df_old_path):
             df_old = pd.read_csv(df_old_path)
         else:
@@ -280,6 +286,17 @@ def check_and_scrape_dm(target_user, chunk):
             t_flag = 0
         else:
             t_flag = int(df_old['SendTime'].max())
+        try:
+            df_new = clean_danmaku(get_danmaku(cid))
+            df_new = df_new[df_new['SendTime']>t_flag]
+            if len(df_new) > 0:
+                print(f'Scrape DM: {bvid}')
+            else:
+                print(f'No updated DM: {bvid}')
+        except KeyError:
+            print(f'dm failed: {bvid}')
+            continue
+        df_new_path = f'./{target_user}{chunk}/dm/{bvid}.csv'
         pd.concat([df_new, df_old])\
           .drop_duplicates()\
           .to_csv(df_new_path, index=0)
