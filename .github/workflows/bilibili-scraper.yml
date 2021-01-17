@@ -442,15 +442,12 @@ jobs:
         path: cyberstar6
     - name: Merge
       run: |
-        echo $(date '+%Y-%m-%d %H:%M:%S') > error_log
-        ls cyberstar[0-9]/dm/* >> error_log
-        cp -n cyberstar[0-9]/dm/* cyberstar_dm 2>> error_log
-        ls rookie[0-9]/dm/* >> error_log
-        cp -n rookie[0-9]/dm/* rookie_dm 2>> error_log
-        ls cyberstar[0-9]/update/* >> error_log
-        cp -n cyberstar[0-9]/update/* cyberstar_list 2>> error_log
-        ls rookie[0-9]/update/* >> error_log
-        cp -n rookie[0-9]/update/* rookie_list 2>> error_log
+        for i in {1..6}; do
+          cp cyberstar${i}/dm/* cyberstar_dm;
+          cp rookie${i}/dm/* rookie_dm;
+          cp cyberstar${i}/update/* cyberstar_list;
+          cp rookie${i}/update/* rookie_list;
+        done;
     - name: commit
       run: |
         git config --global user.email bot.jimmy@bot.com

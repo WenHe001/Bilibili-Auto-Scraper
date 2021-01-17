@@ -201,9 +201,10 @@ def clean_danmaku(df):
     df['SendTime'] = df['SendTime'].astype(int)
     df['DmContent'] = df['DmContent'].astype('str')
     df = df[df['DmContent'].apply(len)>1]
-    df['DmContent'] = df['DmContent'].apply(clean_text) \
-                                     .apply(merge) \
-                                     .apply(lambda x: x.replace(' ', ''))
+    df.loc[:,'DmContent'] = df['DmContent']\
+                              .apply(clean_text)\
+                              .apply(merge)\
+                              .apply(lambda x: x.replace(' ', ''))
     df = df[df['DmContent'].apply(len)>1]
     df = df.sort_values('SendTime')
     df.reset_index(drop=True, inplace=True)
