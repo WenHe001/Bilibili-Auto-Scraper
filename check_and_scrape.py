@@ -12,6 +12,8 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 from fake_headers import Headers
 
+import warnings
+warnings.simplefilter(action='ignore', category=SettingWithCopyWarning)
 
 # when using "eval" function to convert json string to dict,
 # it will treat these strings as variables
@@ -197,14 +199,14 @@ def clean_danmaku(df):
     output:
         - cleaned df (pd.DataFrame)
     '''
-    df.loc[:,'AppearTime'] = df['AppearTime'].astype(float)
-    df.loc[:,'SendTime'] = df['SendTime'].astype(int)
-    df.loc[:,'DmContent'] = df['DmContent'].astype('str')
+    df['AppearTime'] = df['AppearTime'].astype(float)
+    df['SendTime'] = df['SendTime'].astype(int)
+    df['DmContent'] = df['DmContent'].astype('str')
     df = df[df['DmContent'].apply(len)>1]
-    df.loc[:,'DmContent'] = df['DmContent']\
-                              .apply(clean_text)\
-                              .apply(merge)\
-                              .apply(lambda x: x.replace(' ', ''))
+    df['DmContent'] = df['DmContent']\
+                          .apply(clean_text)\
+                          .apply(merge)\
+                          .apply(lambda x: x.replace(' ', ''))
     df = df[df['DmContent'].apply(len)>1]
     df = df.sort_values('SendTime')
     df.reset_index(drop=True, inplace=True)
