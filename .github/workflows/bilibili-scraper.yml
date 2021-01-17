@@ -445,10 +445,10 @@ jobs:
     - name: Merge
       run: |
         for i in {1..6}; do
-          cp cyberstar${i}/dm/* cyberstar_dm;
-          cp rookie${i}/dm/* rookie_dm;
-          cp cyberstar${i}/update/* cyberstar_list;
-          cp rookie${i}/update/* rookie_list;
+          [[ -e cyberstar${i}/dm/* ]] && cp cyberstar${i}/dm/* cyberstar_dm;
+          [[ -e rookie${i}/dm/* ]] && cp rookie${i}/dm/* rookie_dm;
+          [[ -e cyberstar${i}/update/* ]] && cp cyberstar${i}/update/* cyberstar_list;
+          [[ -e rookie${i}/update/* ]] && cp rookie${i}/update/* rookie_list;
         done;
     - name: commit
       run: |
