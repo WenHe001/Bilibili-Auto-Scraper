@@ -60,7 +60,9 @@ jobs:
         pip install fake_headers
     - name: Check update and scrape DM
       run: |
-        python check_and_scrape.py cyberstar 1 
+        python check_and_scrape.py cyberstar 1
+        echo $(date +%s) > cyberstar1/dm/EMPTY
+        echo $(date +%s) > cyberstar1/update/EMPTY
     - uses: actions/upload-artifact@master
       with:
         name: cyberstar1
@@ -89,7 +91,9 @@ jobs:
         pip install fake_headers
     - name: Check update and scrape DM
       run: |
-        python check_and_scrape.py cyberstar 2 
+        python check_and_scrape.py cyberstar 2
+        echo $(date +%s) > cyberstar2/dm/EMPTY
+        echo $(date +%s) > cyberstar2/update/EMPTY
     - uses: actions/upload-artifact@master
       with:
         name: cyberstar2
@@ -118,7 +122,9 @@ jobs:
         pip install fake_headers
     - name: Check update and scrape DM
       run: |
-        python check_and_scrape.py cyberstar 3 
+        python check_and_scrape.py cyberstar 3
+        echo $(date +%s) > cyberstar3/dm/EMPTY
+        echo $(date +%s) > cyberstar3/update/EMPTY
     - uses: actions/upload-artifact@master
       with:
         name: cyberstar3
@@ -147,7 +153,9 @@ jobs:
         pip install fake_headers
     - name: Check update and scrape DM
       run: |
-        python check_and_scrape.py cyberstar 4 
+        python check_and_scrape.py cyberstar 4
+        echo $(date +%s) > cyberstar4/dm/EMPTY
+        echo $(date +%s) > cyberstar4/update/EMPTY
     - uses: actions/upload-artifact@master
       with:
         name: cyberstar4
@@ -176,7 +184,9 @@ jobs:
         pip install fake_headers
     - name: Check update and scrape DM
       run: |
-        python check_and_scrape.py cyberstar 5 
+        python check_and_scrape.py cyberstar 5
+        echo $(date +%s) > cyberstar5/dm/EMPTY
+        echo $(date +%s) > cyberstar5/update/EMPTY
     - uses: actions/upload-artifact@master
       with:
         name: cyberstar5
@@ -205,7 +215,9 @@ jobs:
         pip install fake_headers
     - name: Check update and scrape DM
       run: |
-        python check_and_scrape.py cyberstar 6 
+        python check_and_scrape.py cyberstar 6
+        echo $(date +%s) > cyberstar6/dm/EMPTY
+        echo $(date +%s) > cyberstar6/update/EMPTY
     - uses: actions/upload-artifact@master
       with:
         name: cyberstar6
@@ -234,7 +246,9 @@ jobs:
         pip install fake_headers
     - name: Check update and scrape DM
       run: |
-        python check_and_scrape.py rookie 1 
+        python check_and_scrape.py rookie 1
+        echo $(date +%s) > rookie1/dm/EMPTY
+        echo $(date +%s) > rookie1/update/EMPTY 
     - uses: actions/upload-artifact@master
       with:
         name: rookie1
@@ -264,6 +278,8 @@ jobs:
     - name: Check update and scrape DM
       run: |
         python check_and_scrape.py rookie 2 
+        echo $(date +%s) > rookie2/dm/EMPTY
+        echo $(date +%s) > rookie2/update/EMPTY
     - uses: actions/upload-artifact@master
       with:
         name: rookie2
@@ -292,7 +308,9 @@ jobs:
         pip install fake_headers
     - name: Check update and scrape DM
       run: |
-        python check_and_scrape.py rookie 3 
+        python check_and_scrape.py rookie 3
+        echo $(date +%s) > rookie3/dm/EMPTY
+        echo $(date +%s) > rookie3/update/EMPTY
     - uses: actions/upload-artifact@master
       with:
         name: rookie3
@@ -321,7 +339,9 @@ jobs:
         pip install fake_headers
     - name: Check update and scrape DM
       run: |
-        python check_and_scrape.py rookie 4 
+        python check_and_scrape.py rookie 4
+        echo $(date +%s) > rookie4/dm/EMPTY
+        echo $(date +%s) > rookie4/update/EMPTY
     - uses: actions/upload-artifact@master
       with:
         name: rookie4
@@ -350,7 +370,9 @@ jobs:
         pip install fake_headers
     - name: Check update and scrape DM
       run: |
-        python check_and_scrape.py rookie 5 
+        python check_and_scrape.py rookie 5
+        echo $(date +%s) > rookie5/dm/EMPTY
+        echo $(date +%s) > rookie5/update/EMPTY
     - uses: actions/upload-artifact@master
       with:
         name: rookie5
@@ -379,7 +401,9 @@ jobs:
         pip install fake_headers
     - name: Check update and scrape DM
       run: |
-        python check_and_scrape.py rookie 6 
+        python check_and_scrape.py rookie 6
+        echo $(date +%s) > rookie6/dm/EMPTY
+        echo $(date +%s) > rookie6/update/EMPTY
     - uses: actions/upload-artifact@master
       with:
         name: rookie6
@@ -445,10 +469,6 @@ jobs:
     - name: Merge
       run: |
         for i in {1..6}; do
-          echo $(date +%s) > cyberstar${i}/dm/EMPTY;
-          echo $(date +%s) > rookie${i}/dm/EMPTY;
-          echo $(date +%s) > cyberstar${i}/update/EMPTY;
-          echo $(date +%s) > rookie${i}/update/EMPTY;
           cp cyberstar${i}/dm/* cyberstar_dm;
           cp rookie${i}/dm/* rookie_dm;
           cp cyberstar${i}/update/* cyberstar_list;
