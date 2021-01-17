@@ -42,7 +42,12 @@ def check_update(t_flag, up_list):
         # API of video publish list (mid = user id)
         url = f'https://api.bilibili.com/x/space/arc/search?mid={i}&ps=5&order=pubdate'
         # convert json string to python dict
-        json = eval(requests.get(url).content.decode('utf-8'))
+        try:
+            resp = requests.get(url).content.decode('utf-8')
+        except requests.exceptions.ConnectionError:
+            print(f'ConnectionError: {bvid}')
+            continue
+        json = eval(resp)
         try:
             # if there's no new video, this list would not have the key "vlist"
             bvid_list = [[i, v['bvid'], v['created']] 
