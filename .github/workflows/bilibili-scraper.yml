@@ -498,6 +498,7 @@ jobs:
         MY_TOKEN: ${{ secrets.MY_TOKEN }}
       run: |
         sleep 10m
+        echo EMPTY > EMPTY
         git config --local user.email "loop@loop.com"
         git config --local user.name "Loop"
         git pull https://${MY_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
