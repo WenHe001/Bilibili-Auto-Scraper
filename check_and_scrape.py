@@ -13,6 +13,7 @@ from bs4 import BeautifulSoup
 from fake_headers import Headers
 
 import warnings
+from pandas.core.common import SettingWithCopyWarning
 warnings.simplefilter(action='ignore', category=SettingWithCopyWarning)
 
 # when using "eval" function to convert json string to dict,
