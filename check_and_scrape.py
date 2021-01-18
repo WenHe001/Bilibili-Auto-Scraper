@@ -270,8 +270,11 @@ def check_and_scrape_dm(target_user, chunk):
     # scrape danmaku
     for bvid in df['bvid'][df['cdate']>two_weeks_ago]:
         # get video information
-        cid, *stat_list = get_video_stat(bvid)
-        
+        try:
+            cid, *stat_list = get_video_stat(bvid)
+        except:
+            print(f'Get CID failed: {bvid}')
+            continue
         # check video info scraping history
         if os.path.exists(f'./{target_user}_dm/{bvid}_history.csv'):
             with open(f'./{target_user}_dm/{bvid}_history.csv', 'r') as f:
