@@ -273,8 +273,8 @@ def check_and_scrape_dm(target_user, chunk):
         cid, *stat_list = get_video_stat(bvid)
         
         # check video info scraping history
-        if os.path.exists(f'{bvid}_history.csv'):
-            with open(f'{bvid}_history.csv', 'r') as f:
+        if os.path.exists(f'./{target_user}_dm/{bvid}_history.csv'):
+            with open(f'./{target_user}_dm/{bvid}_history.csv', 'r') as f:
                 scrape_history = f.read().strip()
         else:
             scrape_history = ''
