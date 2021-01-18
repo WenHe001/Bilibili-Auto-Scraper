@@ -269,33 +269,46 @@ def check_and_scrape_dm(target_user, chunk):
     
     # scrape danmaku
     for bvid in df['bvid'][df['cdate']>two_weeks_ago]:
+        # get video information
         cid, *stat_list = get_video_stat(bvid)
+        
+        # check video info scraping history
         if os.path.exists(f'{bvid}_history.csv'):
             with open(f'{bvid}_history.csv', 'r') as f:
                 scrape_history = f.read().strip()
         else:
             scrape_history = ''
+            
+        # create history file
         with open(f'./{target_user}{chunk}/dm/{bvid}_history.csv', 'w') as f:
             f.write(','.join(stat_list)+'\n'+scrape_history)
         df_old_path = f'./{target_user}_dm/{bvid}.csv'
+        
+        # scrape dm
+        try:
+            df_new = clean_danmaku(get_danmaku(cid))
+        except KeyError:
+            print(f'dm failed: {bvid}')
+            continue
+            
+        # check dm scraping history
         if os.path.exists(df_old_path):
             df_old = pd.read_csv(df_old_path)
         else:
             df_old = pd.DataFrame(columns=df_new.columns)
+            
+        # get last scraping time
         if df_old['SendTime'].max() is np.nan:
             t_flag = 0
         else:
             t_flag = int(df_old['SendTime'].max())
-        try:
-            df_new = clean_danmaku(get_danmaku(cid))
-            df_new = df_new[df_new['SendTime']>t_flag]
-            if len(df_new) > 0:
-                print(f'Scrape DM: {bvid}')
-            else:
-                print(f'No updated DM: {bvid}')
-        except KeyError:
-            print(f'dm failed: {bvid}')
-            continue
+             
+        # combine new and old dm
+        df_new = df_new[df_new['SendTime']>t_flag]
+        if len(df_new) > 0:
+            print(f'Scrape DM: {bvid}')
+        else:
+            print(f'No updated DM: {bvid}')
         df_new_path = f'./{target_user}{chunk}/dm/{bvid}.csv'
         pd.concat([df_new, df_old])\
           .drop_duplicates()\
