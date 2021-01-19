@@ -296,7 +296,7 @@ def check_and_scrape_dm(target_user, chunk):
         # scrape dm
         try:
             df_new = clean_danmaku(get_danmaku(cid))
-        except KeyError:
+        except:
             print(f'dm failed: {bvid}')
             continue
             
