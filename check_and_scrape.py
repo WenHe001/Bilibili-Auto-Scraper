@@ -47,7 +47,7 @@ def check_update(t_flag, up_list):
         try:
             resp = requests.get(url).content.decode('utf-8')
         except:
-            print(f'ConnectionError: {bvid}')
+            print(f'[check_update] GET Faild: {bvid}')
             continue
         json = eval(resp)
         try:
@@ -58,7 +58,7 @@ def check_update(t_flag, up_list):
                 print(f'Update: {i}-{j[1]}')
         except:
             bvid_list = []
-            print(f'Check Failed: {i}')
+            print(f'[check_update] Extract Info Faild: {i}')
         update_list += bvid_list
         time.sleep(0.3)
     df_update = pd.DataFrame(update_list, columns=['uid', 'bvid', 'cdate'])
@@ -76,7 +76,7 @@ def get(url):
     try:
         resp = requests.get(url, headers={'user-agent': Headers().generate()['User-Agent']})
     except:
-        print('Reconnect')
+        print('[get] Reconnect')
         time.sleep(5)
         resp = requests.get(url, headers={'user-agent': Headers().generate()['User-Agent']})
     return resp
@@ -91,16 +91,22 @@ def get_video_stat(bvid):
         - cid, view, favorite, coin, share, like
     '''
     url = f'http://api.bilibili.com/x/web-interface/view?bvid={bvid}'
-    resp = eval(requests.get(url).content.decode('utf-8'))
-    stat_list = [
-        str(resp['data']['cid']),
-        str(resp['data']['stat']['view']),
-        str(resp['data']['stat']['favorite']),
-        str(resp['data']['stat']['coin']),
-        str(resp['data']['stat']['share']),
-        str(resp['data']['stat']['like']),
-        str(int(datetime.now().timestamp()))
-    ]
+    try:
+        resp = eval(requests.get(url).content.decode('utf-8'))
+    except:
+        print(f'[get_video_stat] GET Faild: {bvid}')
+    try:
+        stat_list = [
+            str(resp['data']['cid']),
+            str(resp['data']['stat']['view']),
+            str(resp['data']['stat']['favorite']),
+            str(resp['data']['stat']['coin']),
+            str(resp['data']['stat']['share']),
+            str(resp['data']['stat']['like']),
+            str(int(datetime.now().timestamp()))
+        ]
+    except:
+        print(f'[get_video_stat] Extract Info Faild: {bvid}')
     return stat_list
 
 
@@ -112,7 +118,10 @@ def get_danmaku_page(cid):
     output:
         - danmaku page (html string)
     '''
-    resp_search = get(f'http://comment.bilibili.com/{cid}.xml')
+    try:
+        resp_search = get(f'http://comment.bilibili.com/{cid}.xml')
+    except:
+        print(f'[get_danmaku_page] GET Faild: {cid}')
     page = resp_search.content.decode('utf-8')
     return page
 
@@ -147,7 +156,10 @@ def get_danmaku(cid):
         - pd.DataFrame
         [Sender,DmContent,AppearTime,SendTime,FontColor,DmType]
     '''
-    page = get_danmaku_page(cid)
+    try:
+        page = get_danmaku_page(cid)
+    except:
+        print(f'[get_danmaku_page] GET Faild: {cid}')
     danmaku = parse_danmaku_page(page)
     return danmaku
 
@@ -279,7 +291,7 @@ def check_and_scrape_dm(target_user, chunk):
         try:
             cid, *stat_list = get_video_stat(bvid)
         except:
-            print(f'Get CID failed: {bvid}')
+            print(f'[check_and_scrape_dm] GET Failed: {bvid}')
             continue
         # check video info scraping history
         if os.path.exists(f'./{target_user}_dm/{bvid}_history.csv'):
@@ -297,7 +309,7 @@ def check_and_scrape_dm(target_user, chunk):
         try:
             df_new = clean_danmaku(get_danmaku(cid))
         except:
-            print(f'dm failed: {bvid}')
+            print(f'[check_and_scrape_dm] DM Failed: {bvid}')
             continue
             
         # check dm scraping history

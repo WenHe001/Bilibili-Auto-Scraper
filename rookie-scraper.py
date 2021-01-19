@@ -19,7 +19,7 @@ with open('rookie.txt', 'r') as f:
     old_list = f.read().split('\n')
     
 new_list = list(filter(lambda x: x not in old_list, new_list))
-rookie_list = old_list + new_list
+rookie_list = list(filter(lambda x: x!='', old_list + new_list))
 
 with open('rookie.txt', 'w') as f:
     f.write('\n'.join(rookie_list))
