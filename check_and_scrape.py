@@ -281,7 +281,10 @@ def check_and_scrape_dm(target_user, chunk):
         t_flag = int(f.read().strip())
         
     # check update
-    df_update = check_update(t_flag, up_list)
+    try:
+        df_update = check_update(t_flag, up_list)
+    except:
+        df_update = pd.DataFrame(columns=df.columns)
     df = pd.concat([df, df_update])
     df.to_csv(f'./{target_user}{chunk}/update/{file_name}', index=0)
     
