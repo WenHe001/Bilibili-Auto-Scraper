@@ -46,7 +46,7 @@ def check_update(t_flag, up_list):
         # convert json string to python dict
         try:
             resp = requests.get(url).content.decode('utf-8')
-        except requests.exceptions.ConnectionError:
+        except:
             print(f'ConnectionError: {bvid}')
             continue
         json = eval(resp)
@@ -73,7 +73,13 @@ def get(url):
     output:
         - response
     '''
-    return requests.get(url, headers={'user-agent': Headers().generate()['User-Agent']})
+    try:
+        resp = requests.get(url, headers={'user-agent': Headers().generate()['User-Agent']})
+    except:
+        print('Reconnect')
+        time.sleep(5)
+        resp = requests.get(url, headers={'user-agent': Headers().generate()['User-Agent']})
+    return resp
 
 
 def get_video_stat(bvid):
